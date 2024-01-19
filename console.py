@@ -1,5 +1,5 @@
-mplementing the console for the HBnB project.
-'''
+# implementing the console for the HBnB project.
+
 import cmd
 import json
 import shlex
