@@ -1,4 +1,6 @@
-ll the test for the user model are implemented here.
+#!/usr/bin/python3
+'''
+all the test for the user model are implemented here.
 '''
 
 import unittest
