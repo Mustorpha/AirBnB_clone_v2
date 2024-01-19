@@ -1,5 +1,5 @@
-
-lberton School
+"""
+Holberton School
 For HTML and CSS files.
 Based on 2 APIs:
 - https://validator.w3.org/nu/
