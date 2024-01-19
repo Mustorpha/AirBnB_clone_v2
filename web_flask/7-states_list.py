@@ -1,4 +1,5 @@
-cript starts Flask web app
+'''
+Script starts Flask web app
     listen on 0.0.0.0, port 5000
     routes: /:                    display "Hello HBNB!"
             /hbnb:                display "HBNB"
