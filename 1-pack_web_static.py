@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Fabric script to genereate tgz archive
+Fabric script that genereates tgz archive
 execute: fab -f 1-pack_web_static.py do_pack
 """
 
