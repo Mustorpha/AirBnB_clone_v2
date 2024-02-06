@@ -1,30 +1,47 @@
 #!/usr/bin/python3
 """
-Fabric script based on the file 1-pack_web_static.py which distributes
-archive to the web servers
+A function for deploying web_static content to web servers.
 """
+import os
+from datetime import datetime
+from fabric.api import env, put, run
+import shlex
 
-from fabric.api import put, run, env
-from os.path import exists
-env.hosts = ['52.91.124.43', '54.237.52.91']
+
+env.hosts = ['100.27.11.204', '3.85.41.254']
+env.user = 'ubuntu'
 
 
 def do_deploy(archive_path):
-    """distributes an archive to the web servers"""
-    if exists(archive_path) is False:
+    """ Deploys archive to web servers """
+    if not os.path.exists(archive_path):
         return False
+
     try:
-        file_n = archive_path.split("/")[-1]
-        no_ext = file_n.split(".")[0]
-        path = "/data/web_static/releases/"
-        put(archive_path, '/tmp/')
-        run('mkdir -p {}{}/'.format(path, no_ext))
-        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
-        run('rm /tmp/{}'.format(file_n))
-        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
-        run('rm -rf {}{}/web_static'.format(path, no_ext))
+        # Parse archive file name and web_static folder name
+        filename = os.path.basename(archive_path)
+        web_static_folder = filename.split('.')[0]
+
+        # Construct remote paths
+        releases_path = '/data/web_static/releases/{}'.format(web_static_folder)
+        tmp_path = '/tmp/{}'.format(filename)
+
+        # Upload and extract archive
+        put(archive_path, tmp_path)
+        run('mkdir -p {}'.format(releases_path))
+        run('tar -xzf {} -C {}'.format(tmp_path, releases_path))
+
+        # Delete temporary archive and move web_static content to releases_path
+        run('rm {}'.format(tmp_path))
+        run('mv {}/web_static/* {}'.format(releases_path, releases_path))
+
+        # Remove empty web_static folder and create symbolic link
+        run('rm -rf {}/web_static'.format(releases_path))
         run('rm -rf /data/web_static/current')
-        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
+        run('ln -s {} /data/web_static/current'.format(releases_path))
+
+        print('New version deployed!')
         return True
-    except:
+    except Exception as e:
+        print('Error: {}'.format(e))
         return False
