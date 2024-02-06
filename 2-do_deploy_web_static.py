@@ -5,7 +5,6 @@ A function for deploying web_static content to web servers.
 import os
 from datetime import datetime
 from fabric.api import env, put, run
-
 env.hosts = ['100.27.11.204', '3.85.41.254']
 env.user = 'ubuntu'
 
