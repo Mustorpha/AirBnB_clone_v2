@@ -12,7 +12,6 @@ def do_deploy(archive_path):
     """ Deploys archive to web servers """
     if not os.path.exists(archive_path):
         return False
-
     try:
         filename = os.path.basename(archive_path)
         web_static_folder = filename.split('.')[0]
