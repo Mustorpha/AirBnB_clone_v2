@@ -1,1 +1,2 @@
-# Web flask extension of AirBnB clone project
+# Flask Web framework
+

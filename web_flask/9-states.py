@@ -1,36 +1,32 @@
 #!/usr/bin/python3
-"""
-    Python flask script to create routes
-    to states
-"""
+"""starts a Flask web application"""
 
 from flask import Flask, render_template
-from models import storage
-from models.state import State
+import models
 
-
-app = Flask(__name__)
-
-
-@app.route('/states', strict_slashes=True)
-def states():
-    states = storage.all(State)
-    return render_template("9-states.html", states=states, query_with='all')
-
-
-@app.route('/states/<id>', strict_slashes=False)
-def states_by_id(id):
-    for state in storage.all("State").values():
-        if (state.id == id):
-            return render_template("9-states.html", query_with='id')
-        return render_template("9-states.html", states=state, query_with=None)
+app = Flask("__name__")
 
 
 @app.teardown_appcontext
-def teardown_db(self):
-    """ database teardown"""
-    storage.close()
+def refresh(exception):
+        models.storage.close()
+
+
+@app.route("/states", strict_slashes=False)
+def route_states():
+        pep_fix = models.dummy_classes["State"]
+        data = models.storage.all(cls=pep_fix)
+        states = data.values()
+        return render_template('7-states_list.html', states_list=states)
+
+
+@app.route("/states/<id>", strict_slashes=False)
+def route_city():
+        pep_fix = models.dummy_classes["State"]
+        data = models.storage.all(cls=pep_fix)
+        states = data.values()
+        return render_template('8-cities_by_states.html', states_list=states)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=False)
+        app.run()
